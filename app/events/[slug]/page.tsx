@@ -20,8 +20,8 @@ export default async function EventDetail({params}: {params: Promise<{slug: stri
       </nav>
 
       <header className="detail-hero event-detail-hero">
-        <img src={event.image} alt={`${event.location} landscape for ${event.title}`} />
-        <div aria-hidden="true" />
+        <img src={event.image} alt={`Atmosphere for ${event.title} in ${event.location}`} />
+        <div className="event-hero-veil" aria-hidden="true" />
         <div className="event-detail-hero-copy">
           <p className="eyebrow">{event.kind} · {event.date}</p>
           <h1>{event.title}</h1>

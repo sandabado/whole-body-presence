@@ -209,6 +209,12 @@ export type PresenceEvent = {
   images: readonly string[];
 };
 
+const eventMedia = {
+  fire: "/events/desert-fire-circle.jpg",
+  movement: "/events/somatic-practice-space.jpg",
+  room: "/events/evening-circle-room.jpg",
+} as const;
+
 export const events: readonly PresenceEvent[] = [
   {
     slug: "desert-fire-retreat",
@@ -264,13 +270,8 @@ export const events: readonly PresenceEvent[] = [
     notIncluded: ["Transportation to and from Morongo Valley", "Personal items, journals, and ritual objects"],
     scholarshipTerms: "Two places are reserved for financial hardship applicants. If selected, you pay $425. If not selected, you are placed on the regular waitlist. The application is submitted during booking.",
     refundPolicy: "Full refund up to 14 days before the start. 50% refund 7–14 days before. No refund within 7 days.",
-    image: "https://images.unsplash.com/photo-1510511459019-5dda7724fd82?w=1920&h=1080&q=85",
-    images: [
-      "https://images.unsplash.com/photo-1510511459019-5dda7724fd82?w=1600&h=1000&q=85",
-      "https://images.unsplash.com/photo-1599577721626-c0f7e1cb1d65?w=1200&h=900&q=85",
-      "https://images.unsplash.com/photo-1516062423079-7ca13cdc7fb5?w=1200&h=900&q=85",
-      "https://images.unsplash.com/photo-1501004318641-b3f7eb0a1bf9?w=1200&h=900&q=85",
-    ],
+    image: eventMedia.fire,
+    images: [eventMedia.fire, eventMedia.room, eventMedia.movement],
   },
   {
     slug: "new-moon-circle",
@@ -306,8 +307,8 @@ export const events: readonly PresenceEvent[] = [
     notIncluded: ["Parking · street parking is available", "Travel to and from the location"],
     scholarshipTerms: "Three reduced-fee places are held at $35 for community members experiencing financial hardship. Select scholarship interest when requesting access.",
     refundPolicy: "Full refund up to 48 hours before the gathering. No refund after that point.",
-    image: "https://images.unsplash.com/photo-1444464666168-499a3ca1e94c?w=1600&h=1000&q=85",
-    images: ["https://images.unsplash.com/photo-1444464666168-499a3ca1e94c?w=1600&h=1000&q=85"],
+    image: eventMedia.room,
+    images: [eventMedia.room],
   },
   {
     slug: "somatic-intensive-weekend",
@@ -354,8 +355,8 @@ export const events: readonly PresenceEvent[] = [
     notIncluded: ["Transportation", "Personal items"],
     scholarshipTerms: "Three half-fee places are available at $225. Select scholarship interest when requesting access; applications are reviewed privately.",
     refundPolicy: "Full refund up to 14 days before the start. 50% refund 7–14 days before. No refund within 7 days.",
-    image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=1600&h=1000&q=85",
-    images: ["https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=1600&h=1000&q=85"],
+    image: eventMedia.movement,
+    images: [eventMedia.movement],
   },
   {
     slug: "breathwork-facilitator-training",
@@ -389,8 +390,8 @@ export const events: readonly PresenceEvent[] = [
     notIncluded: ["Transportation", "Professional insurance · required separately", "Continuing education credits"],
     scholarshipTerms: "One reduced-fee place is available at $1,500. Scholarship candidates complete the same prerequisite review before enrollment.",
     refundPolicy: "Full refund up to 30 days before the start. 50% refund 14–30 days before. No refund within 14 days.",
-    image: "https://images.unsplash.com/photo-1599577721626-c0f7e1cb1d65?w=1600&h=1000&q=85",
-    images: ["https://images.unsplash.com/photo-1599577721626-c0f7e1cb1d65?w=1600&h=1000&q=85"],
+    image: eventMedia.room,
+    images: [eventMedia.room],
   },
   {
     slug: "full-moon-celebration",
@@ -423,8 +424,8 @@ export const events: readonly PresenceEvent[] = [
     included: ["Sound instrumentation", "Circle facilitation", "Fire materials"],
     notIncluded: ["Alcohol or substances", "Transportation", "Food"],
     refundPolicy: "Full refund up to 72 hours before the celebration. No refund after that point.",
-    image: "https://images.unsplash.com/photo-1470165305631-ef56010af4bb?w=1600&h=1000&q=85",
-    images: ["https://images.unsplash.com/photo-1470165305631-ef56010af4bb?w=1600&h=1000&q=85"],
+    image: eventMedia.fire,
+    images: [eventMedia.fire],
   },
   {
     slug: "virtual-integration-circle",
@@ -457,8 +458,8 @@ export const events: readonly PresenceEvent[] = [
     included: ["Facilitation", "Proton Meet access", "Integration resources"],
     notIncluded: ["Individual follow-up", "Therapy · this gathering is not clinical care"],
     refundPolicy: "This is a free event. No refund policy applies.",
-    image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=1600&h=1000&q=85",
-    images: ["https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=1600&h=1000&q=85"],
+    image: eventMedia.room,
+    images: [eventMedia.room],
   },
 ];
 

@@ -49,7 +49,7 @@ export function Navbar({ onOpenSwitcher, switcherOpen }: NavbarProps) {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", update);
     };
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!menuOpen) return;

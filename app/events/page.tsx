@@ -7,12 +7,12 @@ export default function EventsPage() {
 
   return (
     <div className="page events-page">
-      <header className="page-hero image-hero events-hero">
+      <header className="image-hero events-hero">
         <img
-          src="https://images.unsplash.com/photo-1510511459019-5dda7724fd82?w=1920&h=1080&q=85"
-          alt="High desert in warm evening light"
+          src={featured.image}
+          alt="A small fire circle gathering in the high desert at dusk"
         />
-        <div aria-hidden="true" />
+        <div className="event-hero-veil" aria-hidden="true" />
         <div className="events-hero-copy">
           <p className="eyebrow">RETREATS · CIRCLES · TRAININGS</p>
           <h1>Meet us at the fire.</h1>
@@ -22,7 +22,7 @@ export default function EventsPage() {
 
       <section className="featured-event" aria-labelledby="featured-event-title">
         <Link href={`/events/${featured.slug}`} className="featured-event-image" aria-label={`View ${featured.title}`}>
-          <img src={featured.image} alt="Desert landscape at golden hour" />
+          <img src={featured.image} alt={`Atmosphere for ${featured.title}`} />
           <span className="event-badge">★ FEATURED RETREAT</span>
           <span className="availability-badge"><i aria-hidden="true" /> {featured.availability}</span>
         </Link>

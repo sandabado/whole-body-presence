@@ -122,3 +122,33 @@ test("keeps a single document main landmark", async () => {
   const routes = (await Promise.all(paths.map(source))).join("\n");
   assert.doesNotMatch(routes, /<\/?main\b/);
 });
+
+test("keeps event heroes above their veil and under the fixed navigation", async () => {
+  const [directory, detail, styles, data] = await Promise.all([
+    source("app/events/page.tsx"),
+    source("app/events/[slug]/page.tsx"),
+    source("app/globals.css"),
+    source("app/components/data.ts"),
+  ]);
+
+  assert.match(directory, /className="image-hero events-hero"/);
+  assert.match(directory, /className="event-hero-veil"/);
+  assert.match(detail, /className="event-hero-veil"/);
+  assert.match(styles, /\.page\.events-page, \.page\.event-detail-page[^}]*padding-top:\s*0/);
+  assert.match(styles, /\.image-hero > \.event-hero-veil/);
+  assert.doesNotMatch(styles, /\.image-hero > div/);
+  assert.match(styles, /event-detail-hero-copy > p:not\(\.eyebrow\)/);
+
+  const eventData = data.slice(
+    data.indexOf("export const events"),
+    data.indexOf("export const gallery"),
+  );
+  assert.doesNotMatch(eventData, /images\.unsplash\.com/);
+  for (const path of [
+    "public/events/desert-fire-circle.jpg",
+    "public/events/evening-circle-room.jpg",
+    "public/events/somatic-practice-space.jpg",
+  ]) {
+    await access(new URL(path, root));
+  }
+});
