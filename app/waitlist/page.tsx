@@ -1,1 +1,12 @@
-import {WaitlistForm} from "../components/WaitlistForm";export default function Page(){return <div className="page"><section className="waitlist-page"><div><span className="fire-glyph">🜂</span><p className="eyebrow">INVITE-ONLY BETA · DECEMBER 2026</p><h1>Come sit by the fire.</h1><p>We are opening slowly, relationship by relationship. Add your name and tell us what is calling you.</p></div><WaitlistForm/></section></div>}
+import { WaitlistForm } from "../components/WaitlistForm";
+
+export default function Page() {
+  return <div className="page page-waitlist">
+    <section className="waitlist-stage">
+      <img src="/presence-hero-fire-v1.jpg" alt="People gathered in honest conversation around a desert fire" />
+      <div className="waitlist-stage__veil" />
+      <div className="waitlist-stage__copy"><span className="fire-glyph" aria-hidden="true">🜂</span><p className="eyebrow">INVITE-ONLY BETA · DECEMBER 2026</p><h1>Come sit<br />by the fire.</h1><p>We are opening slowly, relationship by relationship. Add your name and tell us what is calling you.</p><div className="waitlist-stage__signals"><span><i />Early retreat invitations</span><span><i />Keeper introductions</span><span><i />No noise. No tracking.</span></div></div>
+      <div className="waitlist-stage__form"><span className="section-index">YOUR PLACE / 01</span><WaitlistForm /></div>
+    </section>
+  </div>;
+}

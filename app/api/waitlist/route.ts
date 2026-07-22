@@ -1,2 +1,43 @@
-import {getDb} from "../../../db";import {waitlistEntries} from "../../../db/schema";
-export async function POST(request:Request){try{const body=await request.json() as {name?:string;email?:string;interest?:string;message?:string;_gotcha?:string};if(body._gotcha)return Response.json({ok:true});if(!body.name?.trim()||!body.email?.trim())return Response.json({error:"Name and email are required."},{status:400});await getDb().insert(waitlistEntries).values({name:body.name.trim(),email:body.email.trim().toLowerCase(),interest:body.interest?.trim(),message:body.message?.trim()}).onConflictDoUpdate({target:waitlistEntries.email,set:{name:body.name.trim(),interest:body.interest?.trim(),message:body.message?.trim()}});return Response.json({ok:true},{status:201})}catch(e){console.error(e);return Response.json({error:"Unable to join waitlist."},{status:500})}}
+import { getDb } from "../../../db";
+import { waitlistEntries } from "../../../db/schema";
+
+type WaitlistBody = {
+  name?: unknown;
+  email?: unknown;
+  interest?: unknown;
+  message?: unknown;
+  _gotcha?: unknown;
+};
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function clean(value: unknown, limit: number) {
+  return typeof value === "string" ? value.trim().slice(0, limit) : "";
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json() as WaitlistBody;
+    if (clean(body._gotcha, 10)) return Response.json({ ok: true });
+
+    const name = clean(body.name, 100);
+    const email = clean(body.email, 254).toLowerCase();
+    const interest = clean(body.interest, 100) || undefined;
+    const message = clean(body.message, 1500) || undefined;
+
+    if (!name || !emailPattern.test(email)) {
+      return Response.json({ error: "A valid name and email are required." }, { status: 400 });
+    }
+
+    await getDb().insert(waitlistEntries).values({ name, email, interest, message })
+      .onConflictDoUpdate({
+        target: waitlistEntries.email,
+        set: { name, interest, message },
+      });
+
+    return Response.json({ ok: true }, { status: 201 });
+  } catch (error) {
+    console.error("Waitlist submission failed", error);
+    return Response.json({ error: "Unable to join the waitlist." }, { status: 500 });
+  }
+}

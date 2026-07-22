@@ -1,1 +1,11 @@
-import {gallery} from "../components/data";export default function Page(){return <div className="page"><header className="page-hero"><p className="eyebrow">MOMENTS HELD</p><h1>The fire in photographs.</h1><p>We do not curate perfection. We capture truth: sweat, tears, laughter, stillness. Real people doing real work.</p></header><div className="gallery-grid">{gallery.map((g,i)=><figure key={i}><img src={g[0]} alt={g[2]}/><figcaption><b>{g[1]}</b>{g[2]}</figcaption></figure>)}</div></div>}
+import type { Metadata } from "next";
+import { GalleryExperience } from "../components/GalleryExperience";
+
+export const metadata: Metadata = { title: "Moments Held", description: "Real photographs from Whole Body Presence retreats, circles, practices, and community." };
+
+export default function GalleryPage() {
+  return <div className="page page-gallery">
+    <header className="page-hero gallery-hero"><span className="section-index">ARCHIVE / 001—008</span><p className="eyebrow">MOMENTS HELD</p><h1>The fire in<br />photographs.</h1><p>We do not curate perfection. We capture truth: sweat, tears, laughter, stillness. Real people doing real work.</p></header>
+    <section className="gallery-browser"><GalleryExperience /></section>
+  </div>;
+}

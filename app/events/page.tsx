@@ -1,1 +1,58 @@
-import {EventCard} from "../components/Cards";import {events} from "../components/data";export default function Page(){return <div className="page"><header className="page-hero image-hero"><img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd82?w=1920&q=85" alt="High desert at sunset"/><div/><span><p className="eyebrow">RETREATS · CIRCLES · GATHERINGS</p><h1>Meet us at the fire.</h1><p>Small groups. Open sky. Honest work. Choose the room that meets you where you are.</p></span></header><section className="event-grid section">{events.map(e=><EventCard key={e.slug} event={e}/>)}</section></div>}
+import Link from "next/link";
+import {events} from "../components/data";
+import {EventDirectory} from "./EventDirectory";
+
+export default function EventsPage() {
+  const featured = events.find((event) => event.featured) ?? events[0];
+
+  return (
+    <div className="page events-page">
+      <header className="page-hero image-hero events-hero">
+        <img
+          src="https://images.unsplash.com/photo-1510511459019-5dda7724fd82?w=1920&h=1080&q=85"
+          alt="High desert in warm evening light"
+        />
+        <div aria-hidden="true" />
+        <div className="events-hero-copy">
+          <p className="eyebrow">RETREATS · CIRCLES · TRAININGS</p>
+          <h1>Meet us at the fire.</h1>
+          <p>Small groups. Open sky. Honest work. Choose the room that meets you where you are.</p>
+        </div>
+      </header>
+
+      <section className="featured-event" aria-labelledby="featured-event-title">
+        <Link href={`/events/${featured.slug}`} className="featured-event-image" aria-label={`View ${featured.title}`}>
+          <img src={featured.image} alt="Desert landscape at golden hour" />
+          <span className="event-badge">★ FEATURED RETREAT</span>
+          <span className="availability-badge"><i aria-hidden="true" /> {featured.availability}</span>
+        </Link>
+        <div className="featured-event-copy hud-panel">
+          <p className="eyebrow">{featured.date} · {featured.location}</p>
+          <h2 id="featured-event-title">{featured.title}</h2>
+          <p>{featured.description}</p>
+          <dl className="feature-facts">
+            <div><dt>INVESTMENT</dt><dd>{featured.price}</dd></div>
+            <div><dt>SCHOLARSHIP</dt><dd>{featured.scholarship}</dd></div>
+            <div><dt>CAPACITY</dt><dd>{featured.capacity}</dd></div>
+          </dl>
+          <blockquote>“This was not what I expected. It was better.” <cite>— Lena K., past participant</cite></blockquote>
+          <Link className="button ember" href={`/events/${featured.slug}`}>
+            ENTER THE RETREAT <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </section>
+
+      <EventDirectory />
+
+      <section className="events-footer-note" aria-labelledby="events-note-title">
+        <p className="eyebrow">BEFORE YOU ARRIVE</p>
+        <h2 id="events-note-title">Nothing hidden. Nothing pushed.</h2>
+        <p>
+          Every event page includes the complete rhythm, fee, capacity, facilitators,
+          scholarship terms, and refund policy before you request a place.
+        </p>
+        <Link className="text-link" href="/code">Read the community code <span aria-hidden="true">→</span></Link>
+      </section>
+    </div>
+  );
+}

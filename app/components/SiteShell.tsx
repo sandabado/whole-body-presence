@@ -1,7 +1,29 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect,useState,type ReactNode } from "react";
+
+import { useCallback, useState, type ReactNode } from "react";
+import { EmberLayer } from "./EmberLayer";
 import { FireBackground } from "./FireBackground";
-const links=[["/about","About"],["/practitioners","Practitioners"],["/events","Events"],["/sessions","Sessions"],["/gallery","Gallery"]] as const;
-export function SiteShell({children}:{children:ReactNode}){const path=usePathname();const[menu,setMenu]=useState(false);const[switcher,setSwitcher]=useState(false);useEffect(()=>{const fn=(e:KeyboardEvent)=>e.key==="Escape"&&(setMenu(false),setSwitcher(false));addEventListener("keydown",fn);return()=>removeEventListener("keydown",fn)},[]);return <><FireBackground/><div className="grain"/><header className="site-header"><button className="brand" onClick={()=>setSwitcher(true)} aria-label="Open Whole Body constellation"><span className="brand-mark">🜂</span><span>WHOLE BODY<span>/PRESENCE</span></span><span className="brand-grid">••<br/>••</span></button><nav className={menu?"nav-links open":"nav-links"}>{links.map(([href,label])=><Link className={path.startsWith(href)?"active":""} key={href} href={href} onClick={()=>setMenu(false)}>{label}</Link>)}<Link href="/waitlist" className="join">Join the fire</Link></nav><div className="header-tools"><span className="fire-status"><i/>AWAITING KINDLING</span><button onClick={()=>setMenu(!menu)} aria-expanded={menu}>MENU</button></div></header>{switcher&&<div className="switcher" role="dialog" aria-modal="true"><button className="switcher-close" onClick={()=>setSwitcher(false)}>CLOSE ×</button><div className="switcher-inner"><p className="eyebrow">THE CONSTELLATION / FIVE RAYS</p><h2>ONE BODY.<br/>FIVE SYSTEMS.</h2><div className="ray-list"><a href="https://wholebody.foundation"><span>01</span><b>EARTH</b><em>Foundation · Active</em></a><a href="https://wholebody.studios"><span>02</span><b>WATER</b><em>Studios · Active</em></a><div className="current"><span>03</span><b>FIRE</b><em>Presence · You are here</em></div><a href="https://wholebody.press"><span>04</span><b>AIR</b><em>Press · Active</em></a><div><span>05</span><b>AETHER</b><em>Guardian · Forming</em></div></div></div></div>}<main>{children}</main><footer><div className="footer-status"><i/>SYSTEM STATUS: AWAITING KINDLING</div><p>SO IT IS BUILT. SO IT HOLDS. SO IT IS. 🍀</p><blockquote>“Fire does not consume. Fire transforms.”</blockquote><nav><Link href="/">HOME</Link><Link href="/events">GATHERINGS</Link><Link href="/about">ABOUT</Link><Link href="/code">CODE</Link><Link href="/contact">CONTACT</Link><Link href="/legal/privacy">PRIVACY</Link><Link href="/legal/terms">TERMS</Link></nav><small>WHOLEBODY.COMMUNITY · COPYRIGHT © 2026 WHOLE BODY GUILD LLC</small></footer></>}
+import { Footer } from "./Footer";
+import { Navbar } from "./Navbar";
+import { ProductSwitcher } from "./ProductSwitcher";
+
+export function SiteShell({ children }: { children: ReactNode }) {
+  const [switcherOpen, setSwitcherOpen] = useState(false);
+  const openSwitcher = useCallback(() => setSwitcherOpen(true), []);
+  const closeSwitcher = useCallback(() => setSwitcherOpen(false), []);
+
+  return (
+    <>
+      <FireBackground />
+      <EmberLayer />
+      <div className="grain" aria-hidden="true" />
+      <Navbar
+        onOpenSwitcher={openSwitcher}
+        switcherOpen={switcherOpen}
+      />
+      <ProductSwitcher open={switcherOpen} onClose={closeSwitcher} />
+      <main id="main-content" tabIndex={-1}>{children}</main>
+      <Footer />
+    </>
+  );
+}
