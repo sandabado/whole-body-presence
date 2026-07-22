@@ -14,15 +14,57 @@ test("ships the authored Presence experience instead of the starter preview", as
   ]);
 
   assert.match(home, /<HomeExperience\s*\/>/);
-  assert.match(experience, /Where the fire meets the body\./);
-  assert.match(experience, /presence-hero-fire-v1\.jpg/);
+  assert.match(experience, /<FireHero\s*\/>/);
   assert.match(experience, /Not extraction\. Transformation\./);
   assert.match(experience, /Desert Fire Retreat/);
   assert.match(layout, /Whole Body Presence/);
   assert.match(layout, /https:\/\/wholebody\.community/);
   assert.match(shell, /<main id="main-content"/);
   assert.doesNotMatch(home + experience + layout, /SkeletonPreview|codex-preview|Your site is taking shape/);
-  await access(new URL("public/presence-hero-fire-v1.jpg", root));
+});
+
+test("renders an SSR-safe living fire hero with an accessible static fallback", async () => {
+  const [hero, capability] = await Promise.all([
+    source("app/components/FireHero/FireHero.tsx"),
+    source("app/components/FireHero/hooks/useDeviceMemory.ts"),
+  ]);
+
+  assert.equal(
+    [...hero.matchAll(/<h1\b/g)].length,
+    1,
+    "the hero should contain exactly one semantic h1",
+  );
+  assert.match(hero, /Where the fire meets the body\./);
+  assert.match(hero, /Retreats in the desert/);
+  assert.match(hero, /href=["']\/events["']/);
+  assert.match(hero, /href=["']\/about["']/);
+  assert.match(hero, /Find a gathering/);
+  assert.match(hero, /Learn our way/);
+  assert.match(hero, /aria-labelledby=/);
+  assert.match(hero, /aria-describedby=/);
+
+  assert.match(hero, /<(?:img|picture)\b/);
+  assert.match(hero, /presence-hero-fire-v1\.jpg/);
+  assert.match(hero, /\bimport\(\s*["']\.\/RibbonSystem["']\s*\)/);
+
+  assert.match(hero, /useDeviceMemory\s*\(/);
+  assert.match(hero, /\breducedMotion\b/);
+  assert.match(hero, /\breducedData\b/);
+  assert.match(hero, /\bwebgl\b/);
+  assert.match(capability, /prefers-reduced-motion:\s*reduce/);
+
+  await Promise.all(
+    [
+      "app/components/FireHero/RibbonSystem.tsx",
+      "app/components/FireHero/shaders/ribbon.frag",
+      "app/components/FireHero/controls/AmbienceToggle.tsx",
+      "app/components/FireHero/controls/LoadingFallback.tsx",
+      "app/components/FireHero/hooks/useDeviceMemory.ts",
+      "app/components/FireHero/hooks/usePointerInfluence.ts",
+      "app/components/FireHero/hooks/useScrollSpeed.ts",
+      "public/presence-hero-fire-v1.jpg",
+    ].map((path) => access(new URL(path, root))),
+  );
 });
 
 test("keeps the complete content model and honest beta booking states", async () => {

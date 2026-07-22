@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FireHero } from "./FireHero/FireHero";
 import { HomeMotion } from "./HomeMotion";
 import { WaitlistForm } from "./WaitlistForm";
 import { gallery, practitioners } from "./data";
@@ -187,51 +188,7 @@ export function HomeExperience() {
   return (
     <div className="home-experience">
       <HomeMotion />
-      <section className="home-hero" aria-labelledby="home-hero-title">
-        <div className="home-hero__media">
-          <img
-            className="home-hero__image"
-            src="/presence-hero-fire-v1.jpg"
-            alt="Six people listening to one another around a fire in the high desert at dusk"
-            fetchPriority="high"
-          />
-          <div className="home-hero__veil" aria-hidden="true" />
-          <div className="home-hero__embers" aria-hidden="true">
-            {Array.from({ length: 16 }, (_, index) => (
-              <i key={index} />
-            ))}
-          </div>
-          <span className="home-hero__tetrahedron" aria-hidden="true">
-            🜂
-          </span>
-        </div>
-
-        <div className="home-hero__content">
-          <p className="eyebrow">Whole Body Presence · The Healing Portal</p>
-          <h1 id="home-hero-title">Where the fire meets the body.</h1>
-          <p className="home-hero__lede">
-            Retreats in the desert. Ceremonies under open sky. Private sessions
-            with trained keepers. A living community where transformation
-            happens between people, not platforms.
-          </p>
-          <div className="home-hero__actions">
-            <Link className="button ember" href="/events">
-              Find a gathering →
-            </Link>
-            <Link className="button" href="/about">
-              Learn our way
-            </Link>
-          </div>
-          <p className="home-hero__meta">
-            Invite-only beta December 2026 · Open access Q1 2027
-          </p>
-        </div>
-
-        <a className="home-hero__scroll" href="#way-of-fire" aria-label="Scroll to the Way of Fire">
-          <span>Keep going</span>
-          <b aria-hidden="true">↓</b>
-        </a>
-      </section>
+      <FireHero />
 
       <section
         className="home-way-of-fire"

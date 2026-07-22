@@ -44,6 +44,9 @@ export default defineConfig(async () => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
   return {
+    // Drei's optional diagnostics bundle carries its own Three.js version.
+    // Force every renderer path onto the project's single Three instance.
+    resolve: { dedupe: ["three", "@react-three/fiber"] },
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
