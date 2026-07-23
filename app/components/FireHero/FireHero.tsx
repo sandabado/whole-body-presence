@@ -185,14 +185,7 @@ export function FireHero() {
       aria-describedby="presence-fire-hero-description"
     >
       <div className={styles.visual} aria-hidden="true">
-        <div className={styles.fallback}>
-          <img
-            className={styles.fallbackImage}
-            src="/presence-hero-fire-v1.jpg"
-            alt=""
-            fetchPriority="high"
-          />
-        </div>
+        <div className={styles.fallback} />
         <div className={styles.canvasSlot}>
           {canRenderWebGL && RibbonSystem ? (
             <RibbonSystem
@@ -233,16 +226,15 @@ export function FireHero() {
           Where the fire meets the body.
         </h1>
         <p className={styles.lede} id="presence-fire-hero-description">
-          Retreats in the desert. Ceremonies under open sky. Private sessions
-          with trained keepers. A living community where transformation happens
-          between people, not platforms.
+          Five energies. Twelve houses. One living fire. Begin with what your
+          body is asking for and enter the work from there.
         </p>
         <div className={styles.actions}>
-          <Link className={styles.primary} href="/events">
-            Find a gathering →
+          <Link className={styles.primary} href="#quincunx">
+            Enter the Quincunx →
           </Link>
-          <Link className={styles.secondary} href="/about">
-            Learn our way
+          <Link className={styles.secondary} href="#houses">
+            Find your house →
           </Link>
         </div>
         <p className={styles.meta}>

@@ -4,112 +4,113 @@ import {
   useCallback,
   useEffect,
   useRef,
-  useState,
   type CSSProperties,
 } from "react";
 import styles from "./ProductSwitcher.module.css";
 
+export type WholeBodySite =
+  | "whole"
+  | "foundation"
+  | "studios"
+  | "presence"
+  | "press"
+  | "guardian";
+
 type ProductSwitcherProps = {
+  current: WholeBodySite;
   open: boolean;
   onClose: () => void;
 };
 
 type Product = {
+  id: WholeBodySite;
+  index: string;
   name: string;
-  system: string;
+  element: string;
+  description: string;
   glyph: string;
   href: string;
   accent: string;
-  state: "current" | "active" | "investor";
 };
 
 const products: Product[] = [
   {
-    name: "Presence",
-    system: "Fire",
-    glyph: "🜂",
-    href: "https://wholebody.community",
-    accent: "#E8542A",
-    state: "current",
+    id: "whole",
+    index: "00",
+    name: "WHOLE",
+    element: "ALL ELEMENTS",
+    description: "Root",
+    glyph: "◎",
+    href: "https://wholebody.earth",
+    accent: "#EDEDED",
   },
   {
-    name: "Foundation",
-    system: "Earth",
+    id: "foundation",
+    index: "01",
+    name: "FOUNDATION",
+    element: "EARTH",
+    description: "The ground",
     glyph: "🜃",
     href: "https://wholebody.foundation",
     accent: "#22C55E",
-    state: "active",
   },
   {
-    name: "Press",
-    system: "Air",
-    glyph: "🜁",
-    href: "https://wholebody.press",
-    accent: "#C9A227",
-    state: "active",
-  },
-  {
-    name: "Studios",
-    system: "Water",
+    id: "studios",
+    index: "02",
+    name: "STUDIOS",
+    element: "WATER",
+    description: "The signal",
     glyph: "🜄",
     href: "https://wholebody.studio",
     accent: "#2BA8A0",
-    state: "active",
   },
   {
-    name: "Guardian",
-    system: "Aether",
+    id: "presence",
+    index: "03",
+    name: "PRESENCE",
+    element: "FIRE",
+    description: "The gathering",
+    glyph: "🜂",
+    href: "https://wholebody.community",
+    accent: "#E8542A",
+  },
+  {
+    id: "press",
+    index: "04",
+    name: "PRESS",
+    element: "AIR",
+    description: "The word",
+    glyph: "🜁",
+    href: "https://wholebody.press",
+    accent: "#C9A227",
+  },
+  {
+    id: "guardian",
+    index: "05",
+    name: "GUARDIAN",
+    element: "ETHER",
+    description: "The agreements",
     glyph: "☉",
     href: "https://wholebody.law",
     accent: "#7C3AED",
-    state: "active",
-  },
-  {
-    name: "Whole",
-    system: "Seal",
-    glyph: "◎",
-    href: "https://wholebody.earth",
-    accent: "#E8542A",
-    state: "investor",
   },
 ];
 
-const focusableSelector = [
-  "a[href]",
-  "button:not([disabled])",
-  "[tabindex]:not([tabindex='-1'])",
-].join(",");
+const focusableSelector =
+  "a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])";
 
-export function ProductSwitcher({ open, onClose }: ProductSwitcherProps) {
-  const [closing, setClosing] = useState(false);
+export function ProductSwitcher({
+  current,
+  open,
+  onClose,
+}: ProductSwitcherProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const restoreFocusRef = useRef<HTMLElement | null>(null);
-  const closingRef = useRef(false);
-  const closeTimerRef = useRef<number | null>(null);
+  const currentProduct =
+    products.find((product) => product.id === current) ?? products[0];
 
-  const requestClose = useCallback(() => {
-    if (closingRef.current) return;
-    closingRef.current = true;
-    setClosing(true);
-    const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? 0
-      : 150;
-    closeTimerRef.current = window.setTimeout(() => {
-      onClose();
-      closingRef.current = false;
-      setClosing(false);
-    }, delay);
-  }, [onClose]);
-
-  useEffect(
-    () => () => {
-      if (closeTimerRef.current !== null) {
-        window.clearTimeout(closeTimerRef.current);
-      }
-    },
-    [],
-  );
+  const requestClose = useCallback(() => onClose(), [onClose]);
 
   useEffect(() => {
     if (!open) return;
@@ -129,12 +130,8 @@ export function ProductSwitcher({ open, onClose }: ProductSwitcherProps) {
       if (event.key !== "Tab" || !dialogRef.current) return;
       const focusable = Array.from(
         dialogRef.current.querySelectorAll<HTMLElement>(focusableSelector),
-      ).filter((element) => !element.hasAttribute("disabled"));
-
-      if (focusable.length === 0) {
-        event.preventDefault();
-        return;
-      }
+      );
+      if (!focusable.length) return;
 
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
@@ -148,7 +145,6 @@ export function ProductSwitcher({ open, onClose }: ProductSwitcherProps) {
     };
 
     document.addEventListener("keydown", handleKeyDown);
-
     return () => {
       window.clearTimeout(focusTimer);
       document.removeEventListener("keydown", handleKeyDown);
@@ -159,9 +155,14 @@ export function ProductSwitcher({ open, onClose }: ProductSwitcherProps) {
 
   if (!open) return null;
 
+  const switcherStyle = {
+    "--switcher-accent": currentProduct.accent,
+  } as CSSProperties;
+
   return (
     <div
-      className={`${styles.backdrop} ${closing ? styles.closing : ""}`}
+      className={styles.backdrop}
+      style={switcherStyle}
       onPointerDown={(event) => {
         if (event.target === event.currentTarget) requestClose();
       }}
@@ -180,86 +181,77 @@ export function ProductSwitcher({ open, onClose }: ProductSwitcherProps) {
           className={styles.close}
           type="button"
           onClick={requestClose}
-          aria-label="Close constellation"
         >
-          <span aria-hidden="true">×</span>
-          <span>Close</span>
+          CLOSE <span aria-hidden="true">×</span>
         </button>
 
-        <header className={styles.heading}>
-          <p className={styles.kicker}>The Whole Body constellation</p>
-          <h2 id="constellation-title">Choose your element.</h2>
-          <p id="constellation-description">
-            Six doors. One living system. Move between them without losing the
-            thread.
+        <div className={styles.inner}>
+          <p className={styles.eyebrow}>THE CONSTELLATION / SIX DOORS</p>
+          <h2 id="constellation-title">
+            FIVE PILLARS.
+            <br />
+            ONE WHOLE BODY.
+          </h2>
+          <p id="constellation-description" className={styles.description}>
+            Move between the Whole Body systems without losing the thread.
           </p>
-        </header>
 
-        <div className={styles.grid}>
-          {products.map((product, index) => {
-            const tileStyle = {
-              "--tile-accent": product.accent,
-              "--tile-delay": `${90 + index * 50}ms`,
-            } as CSSProperties;
-            const tileContent = (
-              <>
-                <i className={`${styles.corner} ${styles.cornerNorthWest}`} />
-                <i className={`${styles.corner} ${styles.cornerNorthEast}`} />
-                <i className={`${styles.corner} ${styles.cornerSouthWest}`} />
-                <i className={`${styles.corner} ${styles.cornerSouthEast}`} />
-                <span className={styles.glyph} aria-hidden="true">
-                  {product.glyph}
-                </span>
-                <strong>{product.name}</strong>
-                <span className={styles.element}>{product.system}</span>
-                <span className={styles.status}>
-                  <i aria-hidden="true" />
-                  {product.state === "current"
-                    ? "★ Here"
-                    : product.state === "investor"
-                      ? "Investor"
-                      : "Active"}
-                </span>
-              </>
-            );
-
-            if (product.state === "current") {
-              return (
-                <div
-                  key={product.name}
-                  className={`${styles.tile} ${styles.current}`}
-                  style={tileStyle}
-                  role="link"
-                  aria-current="page"
-                  aria-disabled="true"
-                  tabIndex={-1}
-                >
-                  {tileContent}
-                </div>
+          <div className={styles.list}>
+            {products.map((product) => {
+              const rowStyle = {
+                "--ray-accent": product.accent,
+              } as CSSProperties;
+              const content = (
+                <>
+                  <span className={styles.index}>{product.index}</span>
+                  <span className={styles.glyph} aria-hidden="true">
+                    {product.glyph}
+                  </span>
+                  <strong>{product.name}</strong>
+                  <em>
+                    {product.element} /{" "}
+                    {product.id === current
+                      ? "YOU ARE HERE"
+                      : product.description}
+                  </em>
+                  <b aria-hidden="true">
+                    {product.id === current ? "●" : "↗"}
+                  </b>
+                </>
               );
-            }
 
-            return (
-              <a
-                key={product.name}
-                className={styles.tile}
-                style={tileStyle}
-                href={product.href}
-                target={product.state === "investor" ? "_blank" : undefined}
-                rel={product.state === "investor" ? "noreferrer" : undefined}
-                aria-label={`${product.name}, ${product.system}${
-                  product.state === "investor" ? ", opens in a new tab" : ""
-                }`}
-              >
-                {tileContent}
-              </a>
-            );
-          })}
+              if (product.id === current) {
+                return (
+                  <div
+                    key={product.id}
+                    className={`${styles.row} ${styles.current}`}
+                    style={rowStyle}
+                    aria-current="page"
+                  >
+                    {content}
+                  </div>
+                );
+              }
+
+              return (
+                <a
+                  key={product.id}
+                  className={styles.row}
+                  style={rowStyle}
+                  href={product.href}
+                  aria-label={`${product.name}, ${product.element}`}
+                >
+                  {content}
+                </a>
+              );
+            })}
+          </div>
+
+          <p className={styles.mantra}>
+            SO IT IS BUILT. SO IT HOLDS. SO IT IS.{" "}
+            <span aria-hidden="true">🍀</span>
+          </p>
         </div>
-
-        <p className={styles.mantra}>
-          So It Is Built. So It Holds. So It Is. <span aria-hidden="true">🍀</span>
-        </p>
       </div>
     </div>
   );

@@ -41,7 +41,6 @@
 
 .visual,
 .fallback,
-.fallbackImage,
 .canvasSlot {
   position: absolute;
   inset: 0;
@@ -61,6 +60,12 @@
   z-index: 0;
   overflow: hidden;
   opacity: 1;
+  background:
+    radial-gradient(ellipse at 50% 88%, rgba(255, 158, 72, 0.46), transparent 7%),
+    radial-gradient(ellipse at 45% 84%, rgba(232, 84, 42, 0.3), transparent 18%),
+    radial-gradient(ellipse at 56% 77%, rgba(184, 61, 26, 0.18), transparent 27%),
+    radial-gradient(circle at 50% 58%, rgba(232, 84, 42, 0.09), transparent 38%),
+    linear-gradient(180deg, #050505 0%, #090604 62%, #160a04 100%);
   transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -69,15 +74,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 50% 58%, rgba(232, 84, 42, 0.12), transparent 28%),
-    linear-gradient(180deg, rgba(5, 5, 5, 0.24), rgba(5, 5, 5, 0.48));
-}
-
-.fallbackImage {
-  object-fit: cover;
-  object-position: center 54%;
-  filter: saturate(0.62) contrast(1.18) brightness(0.55);
-  transform: scale(1.035);
+    repeating-radial-gradient(ellipse at 50% 100%, transparent 0 31px, rgba(232,84,42,.035) 32px 33px),
+    linear-gradient(180deg, rgba(5, 5, 5, 0.05), rgba(5, 5, 5, 0.28));
 }
 
 .canvasSlot {
@@ -103,10 +101,6 @@
 
 .fallbackMode .fallback {
   opacity: 1;
-}
-
-.fallbackMode .fallbackImage {
-  filter: saturate(0.72) contrast(1.18) brightness(0.62);
 }
 
 .content {

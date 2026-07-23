@@ -27,7 +27,11 @@ export function SiteShell({ children }: { children: ReactNode }) {
         onOpenSwitcher={openSwitcher}
         switcherOpen={switcherOpen}
       />
-      <ProductSwitcher open={switcherOpen} onClose={closeSwitcher} />
+      <ProductSwitcher
+        current="presence"
+        open={switcherOpen}
+        onClose={closeSwitcher}
+      />
       <main id="main-content" tabIndex={-1}>{children}</main>
       <Footer />
     </>
